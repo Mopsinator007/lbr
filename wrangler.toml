@@ -1,0 +1,17 @@
+name = "steam-hub"
+pages_build_output_dir = "public"
+compatibility_date = "2026-10-01"
+
+# Not secret: your 17-digit Steam ID (see steamid.io).
+# STEAM_API_KEY and SITE_PASSWORD are secrets and must NOT be written here:
+#   npx wrangler pages secret put STEAM_API_KEY --project-name steam-hub
+#   npx wrangler pages secret put SITE_PASSWORD --project-name steam-hub
+[vars]
+STEAM_ID = "REPLACE_WITH_YOUR_17_DIGIT_STEAM_ID"
+
+# Optional: sync ratings / wishlist / ranking across devices.
+# 1) npx wrangler kv namespace create steamhub   -> copy the id it prints
+# 2) paste the id below and remove the leading "# " on the three lines
+# [[kv_namespaces]]
+# binding = "STEAMHUB"
+# id = "REPLACE_WITH_KV_NAMESPACE_ID"

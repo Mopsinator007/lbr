@@ -1,18 +1,17 @@
-# Steam Hub
+# Steam Hub (Cloudflare Pages + wrangler)
 
-Auto-syncing Steam library with banners, search of the whole Steam store, wishlist, must-play, star ratings and a head-to-head ranking.
+Layout: public/index.html (site) · functions/api/* (server code) · wrangler.toml (config)
 
-## Deploy (free, about 10 minutes)
-1. Create a GitHub repo and upload this folder (index.html + api/).
-2. On vercel.com: Add New > Project > import the repo > Deploy.
-3. Project > Settings > Environment Variables:
-   - STEAM_API_KEY  (steamcommunity.com/dev/apikey)
-   - STEAM_ID       (your 17-digit ID, see steamid.io)
-   - SITE_PASSWORD  (any password; the site asks for it once per device)
-   - optional, for sync across devices: UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN
-     (Vercel > Storage > Marketplace > Upstash Redis > connect; it adds both automatically)
-4. Redeploy. In Steam set Profile > Privacy > Game details to Public.
-5. Domain: Vercel > Settings > Domains > add e.g. hub.itsmadebymo.com and create the DNS record Vercel shows.
+1. Edit wrangler.toml: set STEAM_ID. (Optional: create KV and uncomment the kv block.)
+2. In this folder:
+   npx wrangler login
+   npx wrangler pages project create steam-hub --production-branch main
+   npx wrangler pages secret put STEAM_API_KEY --project-name steam-hub
+   npx wrangler pages secret put SITE_PASSWORD --project-name steam-hub
+   npx wrangler pages deploy
+3. Steam > Profile > Privacy > Game details = Public.
+4. Custom domain: Cloudflare dashboard > Workers & Pages > steam-hub > Custom domains.
 
-New games appear within 2 minutes, when you refocus the tab, or when you press Sync now.
-Without Upstash, ratings/wishlist are saved only in the browser you use.
+Note: once wrangler.toml exists, it is the source of truth for variables and bindings;
+values set in the dashboard are ignored, so keep STEAM_ID / KV in the file.
+Local test: put STEAM_API_KEY=... and SITE_PASSWORD=... in a file named .dev.vars, then run: npx wrangler pages dev
